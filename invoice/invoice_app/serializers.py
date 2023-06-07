@@ -5,7 +5,7 @@ from .models import Invoice
 class InvoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Invoice
-        fields = ["streetAddress", "city","postCode","country",
+        fields = ['id', "streetAddress", "city","postCode","country",
                   "clientName", "clientEmail","clientStreetAddress",
                   "clientCity", "clientPostCode", "clientCountry", 
                   "invoiceDate", "paymentTerms", "projectDescription", 
