@@ -17,11 +17,25 @@ class Invoice(models.Model):
     invoiceDate = models.DateField(auto_now_add=True)
     paymentTerms = models.CharField(max_length=100)
     projectDescription = models.CharField(max_length=200)
+    invoiceStatus = models.CharField(max_length=100, blank=True)
+    markAsPaid = models.BooleanField(default=False)
     #items
-    itemName = models.CharField(max_length=100)
-    itemQuantity = models.CharField(max_length=100)
-    itemPrice = models.IntegerField()
-    totalPrice = models.IntegerField()
+    # itemName = models.CharField(max_length=100)
+    # itemQuantity = models.CharField(max_length=100)
+    # itemPrice = models.IntegerField()
+    # totalPrice = models.IntegerField()
     
     def __str__(self):
         return self.clientName
+    
+    
+    
+class Item(models.Model):
+    item = models.ForeignKey(Invoice, on_delete=models.CASCADE)
+    itemName = models.CharField(max_length=100)
+    itemQuantity = models.CharField(max_length=100)
+    itemPrice = models.CharField(max_length=100)
+    totalPrice = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.itemName

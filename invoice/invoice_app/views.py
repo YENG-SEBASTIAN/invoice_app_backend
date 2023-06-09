@@ -4,8 +4,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework import status
-from .models import Invoice
-from .serializers import InvoiceSerializer
+from .models import Invoice, Item
+from .serializers import InvoiceSerializer, ItemSerializer
 
 # Create your views here.
 @api_view(['GET'])
@@ -52,3 +52,23 @@ def delete_invoice(request, pk):
         invoice.delete()
         return Response(status=status.HTTP_200_OK)
     return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def email_request(request):
+    if request.method == "POST":
+        data =  request.data
+        invoice_serializer = InvoiceSerializer(data=data)
+        item_serializer = ItemSerializer(data=data)
+        if invoice_serializer.is_valid() and item_serializer.is_valid():
+            invoice_serializer.save()
+            item_serializer.save()
+            
+            email = invoice_serializer.data
+            user_invoice = Invoice.objects.filter(clientEmail=email['clientEmail'])
+            
+            context = {
+                "user_invoice" : user_invoice,
+            }
+            return render(request, 'invoice.html', context)
+        return Response(invoice_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return render(request, 'invoice.html', context)

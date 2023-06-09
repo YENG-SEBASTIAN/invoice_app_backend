@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>invoice</title>
+    <style>
+        body{
+            background: rgb(252, 239, 239);
+        }
+        .container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .content{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: column;
+            background-color: #fff;
+            width: 50rem;
+            padding: 1rem;
+        }
+        table{
+            width: 45rem;
+            padding: 1rem; 
+            background: #DFE3FA;
+            border-radius: 1rem 1rem 0rem 0rem; 
+        }
+        table thead tr th{
+            padding: 1rem;
+        }
+        table tbody tr td{
+            text-align: center;
+        }
+        .address, .details{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .table .total{
+            width: 45rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #1E2139;     
+            color: #fff;  
+            border-radius: 0rem 0rem 1rem 1rem;  
+        }
+        .table .total h4{
+            padding: .3rem;
+        }
+        p{
+            font-size: .7rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="content">
+            <h2>INVOICE SUMMARY</h2>
+            <div class="address">
+                <div class="invoice-id">
+                    <h3># RT3080</h3>
+                    <p>Re-branding</p>
+                </div>
+                <div class="invoice-address">
+                    <p>106 Kendell Street</p>
+                    <p>Sharrington</p>
+                    <p>NR24 5WQ</p>
+                    <p>United Kingdom</p>
+                </div>
+            </div>
+            <div class="details">
+                <div class="date">
+                    <div class="payment-date">
+                        <p>Invoice date</p>
+                        <h4>2021-08-18</h4>
+                    </div>
+                    <div class="payment-due">
+                        <p>Payment Due</p>
+                        <h4>2021-08-19</h4>
+                    </div>
+                </div>
+                <div class="bill-to">
+                    <p>Bill to</p>
+                    <h4>Jensen Huang</h4>
+                    <p>106 Kendell Street</p>
+                    <p>Sharrington</p>
+                    <p>NR24 5WQ</p>
+                    <p>United Kingdom</p>
+                </div>
+                <div class="send-to">
+                    <p>Send to</p>
+                    <h4>jensenh@mail.com</h4>
+                </div>
+            </div>
+            <div class="items">
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>QTY</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Brand Guidelines</td>
+                                <td>1</td>
+                                <td>£ 1800.9</td>
+                                <td>£ 1800.9</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="total">
+                        <h4>AmountDue</h4>
+                        <h4>£ 1800.9</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% for invoice in user_invoice %}
+    {{invoice.clientEmail}}
+    {% endfor %}
+</body>
+</html>
