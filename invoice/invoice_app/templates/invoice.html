@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>invoice</title>
-    <style>
+    <style type="text/css">
         body{
             background: rgb(252, 239, 239);
         }
@@ -59,10 +59,10 @@
 </head>
 <body>
 
-    <div class="container">
-        <div class="content">
-            <h2>INVOICE SUMMARY</h2>
-            <div class="address">
+    <div class="container" style="display: flex; align-items: center; justify-content: center;">
+        <div class="content" style="display: flex; align-items: center; justify-content: space-between; flex-direction: column; background-color: #fff; width: 50rem; padding: 1rem;">
+            <!-- <h2>INVOICE SUMMARY</h2> -->
+            <!-- <div class="address" style="width: 100%; display: flex; justify-content: space-between;">
                 <div class="invoice-id">
                     <h3># RT3080</h3>
                     <p>Re-branding</p>
@@ -73,8 +73,8 @@
                     <p>NR24 5WQ</p>
                     <p>United Kingdom</p>
                 </div>
-            </div>
-            <div class="details">
+            </div> -->
+            <!-- <div class="details" style="width: 100%; display: flex; justify-content: space-between;">
                 <div class="date">
                     <div class="payment-date">
                         <p>Invoice date</p>
@@ -97,37 +97,47 @@
                     <p>Send to</p>
                     <h4>jensenh@mail.com</h4>
                 </div>
-            </div>
+            </div> -->
             <div class="items">
                 <div class="table">
-                    <table>
+                    <h2 style="text-align: center;">INVOICE SUMMARY</h2>
+                    <table style="width: 45rem;
+                    padding: 1rem; 
+                    background: #DFE3FA;
+                    border-radius: 1rem 1rem 0rem 0rem;">
                         <thead>
                             <tr>
-                                <th>Item Name</th>
-                                <th>QTY</th>
-                                <th>Price</th>
-                                <th>Total</th>
+                                <th style="padding: 1rem;">Item Name</th>
+                                <th style="padding: 1rem;">QTY</th>
+                                <th style="padding: 1rem;">Price</th>
+                                <th style="padding: 1rem;">Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Brand Guidelines</td>
-                                <td>1</td>
-                                <td>£ 1800.9</td>
-                                <td>£ 1800.9</td>
+                                <td style="text-align: center;">Brand Guidelines</td>
+                                <td style="text-align: center;">1</td>
+                                <td style="text-align: center;">£ 1800.9</td>
+                                <td style="text-align: center;">£ 1800.9</td>
                             </tr>
                         </tbody>
                     </table>
-                    <div class="total">
-                        <h4>AmountDue</h4>
-                        <h4>£ 1800.9</h4>
+                    <div class="total" style="width: 45rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    background: #1E2139;     
+                    color: #fff;  
+                    border-radius: 0rem 0rem 1rem 1rem;">
+                        <h4 style="padding: .3rem;">AmountDue</h4>
+                        <h4 style="padding: .3rem;">£ 1800.9</h4>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    {% for invoice in user_invoice %}
+    <!-- {% for invoice in user_invoice %}
     {{invoice.clientEmail}}
-    {% endfor %}
+    {% endfor %} -->
 </body>
 </html>

@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
+# from django_mysql.models import ListCharField
+
 
 # Create your models here.
 class Invoice(models.Model):
@@ -20,22 +23,14 @@ class Invoice(models.Model):
     invoiceStatus = models.CharField(max_length=100, blank=True)
     markAsPaid = models.BooleanField(default=False)
     #items
-    # itemName = models.CharField(max_length=100)
-    # itemQuantity = models.CharField(max_length=100)
-    # itemPrice = models.IntegerField()
-    # totalPrice = models.IntegerField()
+    itemName = ArrayField(
+            models.CharField(max_length=10, blank=True),
+            size=20,
+    )
+    itemQuantity = ArrayField(models.IntegerField())
+    itemPrice = ArrayField(models.IntegerField())
+    totalPrice = ArrayField(models.IntegerField())
     
     def __str__(self):
         return self.clientName
     
-    
-    
-class Item(models.Model):
-    item = models.ForeignKey(Invoice, on_delete=models.CASCADE)
-    itemName = models.CharField(max_length=100)
-    itemQuantity = models.CharField(max_length=100)
-    itemPrice = models.CharField(max_length=100)
-    totalPrice = models.CharField(max_length=100)
-    
-    def __str__(self):
-        return self.itemName

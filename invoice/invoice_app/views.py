@@ -2,12 +2,15 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.parsers import JSONParser
+from django.template.loader import render_to_string, get_template
+from django.utils.html import strip_tags
+from django.conf import settings
+from .utils import Utils
 from rest_framework import status
-from .models import Invoice, Item
-from .serializers import InvoiceSerializer, ItemSerializer
+from .models import Invoice
+from .serializers import InvoiceSerializer
 
-# Create your views here.
+# get all invoices
 @api_view(['GET'])
 def invoice_list(request):
     if request.method == 'GET':
@@ -15,6 +18,7 @@ def invoice_list(request):
         serializer = InvoiceSerializer(invoices, many=True)
         return Response(serializer.data)
 
+# create an invoice
 @api_view(['POST'])
 def create_invoice(request):
     if request.method == "POST":
@@ -24,9 +28,53 @@ def create_invoice(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+#create an invoice and send an email
+@api_view(['POST'])
+def save_and_send(request):
+    if request.method == "POST":
+        data =  request.data
+        invoice_serializer = InvoiceSerializer(data=data)
+        if invoice_serializer.is_valid():
+            invoice_instace = invoice_serializer.save()
+            invoice_instace.invoiceStatus = 'paid'
+            invoice_instace.markAsPaid = True
+            invoice_instace.save()
+
+            email = invoice_serializer.data
+            user_invoice = Invoice.objects.filter(clientEmail=email['clientEmail'])
+                  
+            context = {
+                "user_invoice" : user_invoice,
+            }
+            
+            to_email = invoice_serializer.data['clientEmail']
+            html_content = render_to_string('invoice.html', context)
+            text_content = strip_tags(html_content)
+            details = {"to_email":to_email, "text_content":text_content, "html_content":html_content}
+            Utils.send_message(details)
+            
+            return Response(invoice_serializer.data, status=status.HTTP_201_CREATED)
+            # return render(request, 'invoice.html', context)
+        return Response(invoice_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return render(request, 'invoice.html', context)
+
+#create an invoice and save as draft
+@api_view(['POST'])
+def save_as_draft(request):
+    if request.method == "POST":
+        data =  request.data
+        invoice_serializer = InvoiceSerializer(data=data)
+        if invoice_serializer.is_valid():
+            invoice_serializer.data['invoiceStatus'] = 'draft'
+            invoice_serializer.save()            
+            return Response(invoice_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(invoice_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+# update invoice and save changes
 @api_view(['PUT'])
-def update_invoice(request, pk):
+def save_changes(request, pk):
     try:
         invoice = Invoice.objects.get(id=pk)
     except Invoice.DoesNotExist:
@@ -41,6 +89,7 @@ def update_invoice(request, pk):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
+# delete invoice
 @api_view(['DELETE'])
 def delete_invoice(request, pk):
     try:
@@ -52,23 +101,3 @@ def delete_invoice(request, pk):
         invoice.delete()
         return Response(status=status.HTTP_200_OK)
     return Response(status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['POST'])
-def email_request(request):
-    if request.method == "POST":
-        data =  request.data
-        invoice_serializer = InvoiceSerializer(data=data)
-        item_serializer = ItemSerializer(data=data)
-        if invoice_serializer.is_valid() and item_serializer.is_valid():
-            invoice_serializer.save()
-            item_serializer.save()
-            
-            email = invoice_serializer.data
-            user_invoice = Invoice.objects.filter(clientEmail=email['clientEmail'])
-            
-            context = {
-                "user_invoice" : user_invoice,
-            }
-            return render(request, 'invoice.html', context)
-        return Response(invoice_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    return render(request, 'invoice.html', context)
