@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>invoice</title>
     <style type="text/css">
-        body{
+        body {
             background: rgb(252, 239, 239);
         }
-        .container{
+
+        .container {
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .content{
+
+        .content {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -23,44 +26,54 @@
             width: 50rem;
             padding: 1rem;
         }
-        table{
+
+        table {
             width: 45rem;
-            padding: 1rem; 
+            padding: 1rem;
             background: #DFE3FA;
-            border-radius: 1rem 1rem 0rem 0rem; 
+            border-radius: 1rem 1rem 0rem 0rem;
         }
-        table thead tr th{
+
+        table thead tr th {
             padding: 1rem;
         }
-        table tbody tr td{
+
+        table tbody tr td {
             text-align: center;
         }
-        .address, .details{
+
+        .address,
+        .details {
             width: 100%;
             display: flex;
             justify-content: space-between;
         }
-        .table .total{
+
+        .table .total {
             width: 45rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: #1E2139;     
-            color: #fff;  
-            border-radius: 0rem 0rem 1rem 1rem;  
+            background: #1E2139;
+            color: #fff;
+            border-radius: 0rem 0rem 1rem 1rem;
         }
-        .table .total h4{
+
+        .table .total h4 {
             padding: .3rem;
         }
-        p{
+
+        p {
             font-size: .7rem;
         }
     </style>
 </head>
+
 <body>
 
     <div class="container" style="display: flex; align-items: center; justify-content: center;">
-        <div class="content" style="display: flex; align-items: center; justify-content: space-between; flex-direction: column; background-color: #fff; width: 50rem; padding: 1rem;">
+        <div class="content"
+            style="display: flex; align-items: center; justify-content: space-between; flex-direction: column; background-color: #fff; width: 50rem; padding: 1rem;">
             <!-- <h2>INVOICE SUMMARY</h2> -->
             <!-- <div class="address" style="width: 100%; display: flex; justify-content: space-between;">
                 <div class="invoice-id">
@@ -114,13 +127,17 @@
                             </tr>
                         </thead>
                         <tbody>
+                        {% for item in items %}                            
                             <tr>
-                                <td style="text-align: center;">Brand Guidelines</td>
-                                <td style="text-align: center;">1</td>
-                                <td style="text-align: center;">£ 1800.9</td>
-                                <td style="text-align: center;">£ 1800.9</td>
+                                <td style="text-align: center;">{{item.itemName}}</td>
+                                <td style="text-align: center;">{{item.itemQty}}</td>
+                                <td style="text-align: center;">£ {{item.itemPrice}}</td>
+                                <td style="text-align: center;">£ {{}}</td>
                             </tr>
+                            <tr>
+                        {% endfor %}
                         </tbody>
+                        {{total}}
                     </table>
                     <div class="total" style="width: 45rem;
                     display: flex;
@@ -131,13 +148,13 @@
                     border-radius: 0rem 0rem 1rem 1rem;">
                         <h4 style="padding: .3rem;">AmountDue</h4>
                         <h4 style="padding: .3rem;">£ 1800.9</h4>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- {% for invoice in user_invoice %}
-    {{invoice.clientEmail}}
-    {% endfor %} -->
+
 </body>
+
 </html>

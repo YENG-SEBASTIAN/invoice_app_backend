@@ -6,9 +6,9 @@ from django.template.loader import render_to_string, get_template
 from django.utils.html import strip_tags
 from django.conf import settings
 from .utils import Utils
-from rest_framework import status
-from .models import Invoice
-from .serializers import InvoiceSerializer
+from rest_framework import status, generics
+from .models import Invoice, Item
+from .serializers import InvoiceSerializer,Filter
 
 # get all invoices
 @api_view(['GET'])
@@ -17,6 +17,7 @@ def invoice_list(request):
         invoices = Invoice.objects.all()
         serializer = InvoiceSerializer(invoices, many=True)
         return Response(serializer.data)
+
 
 # create an invoice
 @api_view(['POST'])
@@ -37,27 +38,15 @@ def save_and_send(request):
         invoice_serializer = InvoiceSerializer(data=data)
         if invoice_serializer.is_valid():
             invoice_instace = invoice_serializer.save()
-            invoice_instace.invoiceStatus = 'paid'
-            invoice_instace.markAsPaid = True
+            invoice_instace.invoiceStatus = 'Pending'
+            # invoice_instace.markAsPaid = True
             invoice_instace.save()
-
-            email = invoice_serializer.data
-            user_invoice = Invoice.objects.filter(clientEmail=email['clientEmail'])
-                  
-            context = {
-                "user_invoice" : user_invoice,
-            }
-            
-            to_email = invoice_serializer.data['clientEmail']
-            html_content = render_to_string('invoice.html', context)
-            text_content = strip_tags(html_content)
-            details = {"to_email":to_email, "text_content":text_content, "html_content":html_content}
-            Utils.send_message(details)
             
             return Response(invoice_serializer.data, status=status.HTTP_201_CREATED)
             # return render(request, 'invoice.html', context)
         return Response(invoice_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    return render(request, 'invoice.html', context)
+    return render(request, 'invoice.html')
+
 
 #create an invoice and save as draft
 @api_view(['POST'])
@@ -66,8 +55,9 @@ def save_as_draft(request):
         data =  request.data
         invoice_serializer = InvoiceSerializer(data=data)
         if invoice_serializer.is_valid():
-            invoice_serializer.data['invoiceStatus'] = 'draft'
-            invoice_serializer.save()            
+            invoice_instace = invoice_serializer.save()
+            invoice_instace.invoiceStatus = 'Draft'
+            invoice_instace.save()
             return Response(invoice_serializer.data, status=status.HTTP_201_CREATED)
         return Response(invoice_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -101,3 +91,92 @@ def delete_invoice(request, pk):
         invoice.delete()
         return Response(status=status.HTTP_200_OK)
     return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    
+@api_view(['PUT'])
+def mark_as_paid(request, pk):
+        try:
+            invoice = Invoice.objects.get(id=pk)
+        except Invoice.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        if request.method == "PUT":
+            data = request.data
+            serializer = InvoiceSerializer(invoice, data=data, partial = True)
+            if serializer.is_valid():
+                invoice_instace = serializer.save()
+                invoice_instace.markAsPaid = True
+                invoice_instace.save()
+                serializer.save()
+                
+                to_email = serializer.data['clientEmail']
+                html_content = render_to_string('invoice.html')
+                text_content = strip_tags(html_content)
+                details = {"to_email":to_email, "text_content":text_content, "html_content":html_content}
+                # Utils.send_message(details)
+                
+                
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    
+
+#filter by status(Paid)
+@api_view(['GET'])
+def filter_invoice_paid(request):
+    if request.method == 'GET':
+        invoices = Invoice.objects.filter(invoiceStatus = 'Paid')
+        serializer = InvoiceSerializer(invoices, many=True)
+        invoices = serializer.data
+        return Response(serializer.data)
+    return   Response(status=status.HTTP_404_NOT_FOUND)
+
+#filter by status(Pending)
+@api_view(['GET'])
+def filter_invoice_pending(request):
+    if request.method == 'GET':
+        invoices = Invoice.objects.filter(invoiceStatus = 'Pending')
+        serializer = InvoiceSerializer(invoices, many=True)
+        invoices = serializer.data
+        return Response(serializer.data)
+    return   Response(status=status.HTTP_404_NOT_FOUND)
+
+
+#filter by status(Draft)
+@api_view(['GET'])
+def filter_invoice_draft(request):
+    if request.method == 'GET':
+        invoices = Invoice.objects.filter(invoiceStatus = 'Draft')
+        serializer = InvoiceSerializer(invoices, many=True)
+        invoices = serializer.data
+        return Response(serializer.data)
+    return   Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+def filter(request):
+    if request.method == "POST":
+        data = request.data
+        serializer = Filter(data=data) 
+        if serializer.is_valid():
+            
+            return Response(serializer.data)
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+def email_invoice(request):
+    invoice = Invoice.objects.get(id=5)
+    for item in invoice.items:
+        total += item.itemPrice * item.Qty
+        context = {
+            "items" : invoice.items,
+            "total" : total
+            }
+        return render(request, 'invoice.html', context)
+    return render(request, 'invoice.html', context)
+    
+    # to_email = invoice_serializer.data['clientEmail']
+    # html_content = render_to_string('invoice.html')
+    # text_content = strip_tags(html_content)
+    # details = {"to_email":to_email, "text_content":text_content, "html_content":html_content}
+    # Utils.send_message(details)
