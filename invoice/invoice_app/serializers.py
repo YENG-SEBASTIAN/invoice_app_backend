@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from django.db import models
-from .models import Invoice, Item
+from .models import Invoice
 
 class InvoiceSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,15 +9,3 @@ class InvoiceSerializer(serializers.ModelSerializer):
                   "toCity", "toPostCode", "toCountry", "invoiceDate", 
                   "paymentTerms", "projectDescription", "invoiceStatus", "markAsPaid",
                   "items"]
-        
-        
-class InvoiceDataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Invoice
-        fields = ['id', "createdAt ", "paymentDue ","description ","paymentTerms ",
-                  "clientName ", "clientEmail ","status ",
-                  "sendersAddress ", "clientAddress ", "items ", "total"]
-        
-class Filter(serializers.Serializer):
-    filterName = serializers.CharField()
-                

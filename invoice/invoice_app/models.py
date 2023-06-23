@@ -28,18 +28,3 @@ class Invoice(models.Model):
     
     def __str__(self):  
         return self.clientName
-    
-    def total_item_price(self):
-        total = self.itemQty * self.itemPrice
-        return total
-    
-
-class Item(models.Model):
-    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
-    itemName = models.CharField(max_length=100)
-    itemQty = models.IntegerField()
-    itemPrice = models.IntegerField()
-    totalItem = models.CharField(max_length=10, blank=True)
-    
-    def __str__(self):
-        return self.itemName

@@ -17,6 +17,9 @@ import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+DATABASE_URL="postgresql://postgres:Ip6P9zzjCmGcxneJgxFl@containers-us-west-105.railway.app:5515/railway"
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -47,6 +50,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -82,18 +86,17 @@ WSGI_APPLICATION = 'invoice.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default' : dj_database_url.config(default=config('DATABASE_URL'), conn_max_age=1800)
-    # 'default': {
+    # 'default' : dj_database_url.config(default=DATABASE_URL, conn_max_age=1800)
+    'default': {
 
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        
+        'ENGINE': 'django.db.backends.postgresql',
         # 'NAME': 'InvoiceDatabase', 
-        # 'NAME': 'invoice_db', 
-        # 'USER': 'postgres',
-        # 'PASSWORD': 'Yeng12345',
-        # 'HOST': '127.0.0.1', 
-        # 'PORT': '5432',
-    # }
+        'NAME': 'railway', 
+        'USER': 'postgres',
+        'PASSWORD': 'Yeng12345',
+        'HOST': '127.0.0.1', 
+        'PORT': '5432',
+    }
 }
 
 
@@ -131,7 +134,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
