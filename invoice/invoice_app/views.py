@@ -165,15 +165,16 @@ def filter(request):
 
 
 def email_invoice(request):
-    invoice = Invoice.objects.get(id=5)
+    invoice = Invoice.objects.get(id=4)
+    total = 0
     for item in invoice.items:
-        total += item.itemPrice * item.Qty
-        context = {
+        return render(request, 'invoice.html', context = {
             "items" : invoice.items,
-            "total" : total
-            }
-        return render(request, 'invoice.html', context)
-    return render(request, 'invoice.html', context)
+            # "total" : total
+            })
+    return render(request, 'invoice.html', context = {
+            "items" : invoice.items,
+            })
     
     # to_email = invoice_serializer.data['clientEmail']
     # html_content = render_to_string('invoice.html')

@@ -23,10 +23,7 @@ class Invoice(models.Model):
     markAsPaid = models.BooleanField(default=False)
     #items
     items = models.JSONField()
-    # itemName = ArrayField(models.CharField(max_length=100))
-    # itemQty = ArrayField(models.IntegerField())
-    # itemPrice = ArrayField(models.IntegerField())
-    # totalItem = ArrayField(models.IntegerField())
+
     
     
     def __str__(self):  
