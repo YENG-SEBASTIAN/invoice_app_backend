@@ -7,8 +7,8 @@ from django.utils.html import strip_tags
 from django.conf import settings
 from .utils import Utils
 from rest_framework import status, generics
-from .models import Invoice, Item
-from .serializers import InvoiceSerializer,Filter
+from .models import Invoice
+from .serializers import InvoiceSerializer
 
 # get all invoices
 @api_view(['GET'])

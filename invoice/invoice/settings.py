@@ -17,7 +17,7 @@ import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DATABASE_URL="postgresql://postgres:Ip6P9zzjCmGcxneJgxFl@containers-us-west-105.railway.app:5515/railway"
+DATABASE_URL="postgresql://postgres:FfvAE5X3Bu4uqnIMyZbt@containers-us-west-38.railway.app:7714/railway"
 
 
 
@@ -86,17 +86,17 @@ WSGI_APPLICATION = 'invoice.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default' : dj_database_url.config(default=DATABASE_URL, conn_max_age=1800)
-    'default': {
+    'default' : dj_database_url.config(default=DATABASE_URL, conn_max_age=1800)
+    # 'default': {
 
-        'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'InvoiceDatabase', 
-        'NAME': 'railway', 
-        'USER': 'postgres',
-        'PASSWORD': 'Yeng12345',
-        'HOST': '127.0.0.1', 
-        'PORT': '5432',
-    }
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'InvoiceDatabase', 
+    #     'NAME': 'railway', 
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'Yeng12345',
+    #     'HOST': '127.0.0.1', 
+    #     'PORT': '5432',
+    # }
 }
 
 
@@ -135,7 +135,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+# STATICFILES_DIRS = [BASE_DIR / 'static']
+
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
