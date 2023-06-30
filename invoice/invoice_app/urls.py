@@ -2,10 +2,11 @@ from django.urls import path
 from . import views
 from .views import (invoice_list, create_invoice, save_and_send, 
                     save_as_draft, save_changes, delete_invoice, filter_invoice_paid, 
-                    mark_as_paid, filter_invoice_pending, filter_invoice_draft, email_invoice)
+                    mark_as_paid, filter_invoice_pending, filter_invoice_draft, email_invoice, get_invoice)
 
 urlpatterns = [
     path('invoice-list/', invoice_list, name='invoices'),
+    path('get-invoice/<int:pk>/', get_invoice, name='invoice'),
     path('create-invoice/', create_invoice, name='create'),
     path('send-save/', save_and_send, name='send'),
     path('send-draft/', save_as_draft, name='draft'),

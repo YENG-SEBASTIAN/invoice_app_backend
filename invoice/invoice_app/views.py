@@ -18,6 +18,17 @@ def invoice_list(request):
         serializer = InvoiceSerializer(invoices, many=True)
         return Response(serializer.data)
 
+@api_view(['GET'])
+def get_invoice(request, pk):
+    try: 
+        invoice = Invoice.objects.get(id=pk)
+    except Invoice.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        serializer = InvoiceSerializer(invoice)
+    return Response(serializer.data)
+
 
 # create an invoice
 @api_view(['POST'])
